@@ -1,4 +1,4 @@
-package toJPEG
+package utils
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	gofitz "github.com/karmdip-mi/go-fitz"
 )
 
-func PDF(fsElementPath string, dest string) error {
+func PDFtoJPEG(fsElementPath string, dest string) error {
 	fileName := filepath.Base(fsElementPath)
 
 	doc, err := gofitz.New(fsElementPath)

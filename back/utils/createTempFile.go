@@ -18,6 +18,7 @@ func CreateTempFile(tempDirectory string, part *multipart.Part) (*os.File, error
 	if err != nil {
 		return nil, err
 	}
+	defer tempFile.Close()
 
 	return tempFile, nil
 }

@@ -1,4 +1,4 @@
-package toJPEG
+package utils
 
 import (
 	"fmt"
@@ -23,9 +23,9 @@ func decodePicture(file *os.File) (image.Image, error) {
 
 }
 
-func IMG(filePath string, dest string) error {
-	fileName := filepath.Base(filePath)
-	file, err := os.Open(filePath)
+func IMGtoJPEG(src string, dest string) error {
+	fileName := filepath.Base(src)
+	file, err := os.Open(src)
 	if err != nil {
 		return err
 	}

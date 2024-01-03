@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"pdf-converter/utils/toJPEG"
 )
 
 func GetFileExt(file *os.File) (string, error) {
@@ -20,7 +19,7 @@ func GetFileExt(file *os.File) (string, error) {
 	return mimeType, nil
 }
 
-func fileToJpeg(dest string) filepath.WalkFunc {
+func fileToFinal(dest string) filepath.WalkFunc {
 	return func(path string, info fs.FileInfo, err error) error {
 		err = os.MkdirAll(dest, 0777)
 		if err != nil {
@@ -40,25 +39,21 @@ func fileToJpeg(dest string) filepath.WalkFunc {
 
 			switch mimeType {
 			case "application/pdf":
-				err = toJPEG.PDF(path, dest)
-				if err != nil {
-					return err
-				}
-				return nil
+				return PDFtoJPEG(path, dest)
+			case "image/gif":
+				return CopyFile(path, dest)
+			case "image/jpeg":
+				return CopyFile(path, dest)
 			default:
-				err = toJPEG.IMG(path, dest)
-				if err != nil {
-					return err
-				}
-				return nil
+				return IMGtoJPEG(path, dest)
 			}
 		}
 		return nil
 	}
 }
 
-func FilesToJPEG(tempDirectory string) (string, error) {
-	jpegDirectory := tempDirectory + "/jpeg"
-	err := filepath.Walk(tempDirectory, fileToJpeg(jpegDirectory))
-	return jpegDirectory, err
+func FilesToFinal(tempDirectory string) (string, error) {
+	finalDirectory := tempDirectory + "/final/"
+	err := filepath.Walk(tempDirectory, fileToFinal(finalDirectory))
+	return finalDirectory, err
 }

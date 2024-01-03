@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func fileToBase64(base64Array []string) filepath.WalkFunc {
+func fileToBase64(base64Array *[]string) filepath.WalkFunc {
 	return func(fsElementName string, info fs.FileInfo, err error) error {
 		if !info.IsDir() {
 			fileBytes, err := os.ReadFile(fsElementName)
@@ -17,8 +17,7 @@ func fileToBase64(base64Array []string) filepath.WalkFunc {
 			}
 			base64File := base64.StdEncoding.EncodeToString(fileBytes)
 			base64File = fmt.Sprintf("data:image/%s;base64,%s", GetExtension(fsElementName), base64File)
-			fmt.Println(base64File)
-			base64Array = append(base64Array, base64File)
+			*base64Array = append(*base64Array, base64File)
 		}
 		return nil
 	}
@@ -26,6 +25,6 @@ func fileToBase64(base64Array []string) filepath.WalkFunc {
 
 func JPEGtoBase64(path string) ([]string, error) {
 	var base64List []string
-	filepath.Walk(path, fileToBase64(base64List))
+	filepath.Walk(path, fileToBase64(&base64List))
 	return base64List, nil
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func FormToFiles(reader *multipart.Reader) (string, error) {
-	tempDirectory := fmt.Sprintf("./temp/%s", TempName())
+	tempDirectory := fmt.Sprintf("temp/%s", TempName())
 	os.MkdirAll(tempDirectory, 0777)
 
 	for {
